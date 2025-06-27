@@ -9,7 +9,7 @@
 <body>
     
     <header>
-        <img src="assets/images/logochat.jpg" alt="le logo de notre site" id="logob">
+        <img src="assets/images/logochat.png" alt="le logo de notre site" id="logob">
     </header>
  
 <h2>S'inscrire</h2>

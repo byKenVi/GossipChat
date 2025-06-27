@@ -14,7 +14,7 @@
             <h3>Concepteur</h3>
             <h3>Learn more</h3>
             <a href="inscription.php"><button class="btn">S'inscrire</button></a>
-            <a href="conexion.php"><button class="btn">Se Connecter</button></a>
+            <a href="connexion.php"><button class="btn">Se Connecter</button></a>
         </div>
     </header>
      <main>
