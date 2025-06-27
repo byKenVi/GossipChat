@@ -1,0 +1,155 @@
+body{
+    background-color: black;
+    color: beige;
+}
+
+  .sideback{
+    background-color: darkmagenta;
+    display: flex;
+    flex-direction: row;
+    border-radius: 45px;
+    gap:60px;
+    align-items: center;
+    margin-top: 50px;
+    margin-right: 30px;
+    margin-left: 30px;
+}
+.bord{
+    display: flex;
+    flex-direction: row;
+    margin-top: 70px;
+    gap:250px;
+    margin-bottom:40px;
+    margin-right: 50px;
+    
+}
+#logo{
+    max-width: 50px;
+    max-height: 50px;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    margin-left: 80px;
+}
+#media{
+    max-width:500px;
+    max-height: 500px;
+    width: auto;
+    height: auto;
+    display: block;
+    margin:0 auto ;
+    
+    
+
+}
+
+    
+ .btn{
+    color: white;
+    background-color: black;
+    border-radius: 30px;
+    font-style: oblique;
+}
+em{
+    color: darkorchid;
+}
+.top{
+    display: flex;
+    margin-top: 70px;
+    justify-content: center;
+    align-items: center;
+}
+footer{
+    background-color: darkmagenta;
+    display: flex;
+    border-radius:45px;
+    align-items: center;
+    justify-content: center;
+    padding-top: 40px;
+    margin-right: 30px;
+    margin-left: 30px;
+    margin-top:80px;
+
+}
+body {
+  margin: 0;
+  padding: 40px 20px;
+  background-color: #121212; /* Noir profond */
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+  text-align: center;
+}
+
+
+h2 {
+  color: darkmagenta;
+  margin-bottom: 20px;
+}
+
+
+
+form {
+  background-color: #1e1e2f; 
+  padding: 25px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  margin: 40px auto;
+  box-shadow: 0 0 10px rgba(192, 132, 252, 0.3); 
+}
+
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  background-color: #2a2a40;
+  color: white;
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 6px;
+  background-color:darkorchid; 
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: darkmagenta;
+}
+
+
+#msgInscription,
+#msgConnexion {
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+  #logob{
+    background-color: black;
+    max-width:150px;
+    max-height: 150px;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    margin-left: 80px;
+
+  }
