@@ -1,12 +1,12 @@
 <?php
 
 $host = 'localhost';
-$db   = 'gossipchat';
+$dbname  = 'gossipchat';
 $user = 'root';
 $pass = '';
 $charset = 'utf8mb4';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
 
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -14,7 +14,7 @@ $options = [
 ];
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
+    $db = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
     exit('Erreur connexion BDD : ' . $e->getMessage());
 }

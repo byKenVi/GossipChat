@@ -28,6 +28,7 @@
       <div id="msgConnexion"></div>
     </form>
     <p>Pas encore de compte ? <a href="inscription.php">Inscrivez-vous ici</a></p>
+    <p>Mot de pass oublié ? <a href="resetpassword.php">Modifier mot de passe</a></p>
       <?php
     if (isset($_GET['error'])) {
         echo '<p style="color:red; margin-top:10px;">' . htmlspecialchars($_GET['error']) . '</p>';
