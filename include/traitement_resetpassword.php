@@ -14,14 +14,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         } 
 
-        $query = $db->prepare("SELECT ID FROM utilisateurs WHERE email=?");
+        $query = $pdo->prepare("SELECT ID FROM utilisateurs WHERE email=?");
         $query->execute([$email]);
         $user = $query->fetch();
 
         if ($user) {
             $resetCode = random_int(100000, 999999); 
             $expiration = date('Y-m-d H:i:s', strtotime('+5 minutes'));
-            $stmt = $db->prepare("INSERT INTO password_resets (email, reset_code, expiration) VALUES (?, ?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO password_resets (email, reset_code, expiration) VALUES (?, ?, ?)");
             $stmt->execute([$email, $resetCode, $expiration]);
 
             $mail = new \PHPMailer\PHPMailer\PHPMailer(); 

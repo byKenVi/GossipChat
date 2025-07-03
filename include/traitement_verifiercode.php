@@ -10,7 +10,7 @@
 <body>
 
   <header>
-    <a href="index.php">
+    <a href="../index.php">
       <img src="../assets/images/logochat.png" alt="logo GossipChat" class="logo-pulse" style="width:56px; height:56px; margin:1rem;" />
     </a>
   </header>
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $code = $_POST['code'] ?? '';
 
-    $stmt = $db->prepare("SELECT * FROM password_resets WHERE email = ? AND reset_code = ? AND expiration > NOW()");
+    $stmt = $pdo->prepare("SELECT * FROM password_resets WHERE email = ? AND reset_code = ? AND expiration > NOW()");
     $stmt->execute([$email, $code]);
     $reset = $stmt->fetch();
 

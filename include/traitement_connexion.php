@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'database.php';
+require_once 'database.php'; // Assure-toi que ce fichier définit bien $pdo
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
@@ -11,8 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Recherche utilisateur par email
-    $stmt = $db->prepare("SELECT * FROM utilisateurs WHERE email = ?");
+    // Utiliser la bonne variable de connexion : $pdo
+    $stmt = $pdo->prepare("SELECT * FROM utilisateurs WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
@@ -21,14 +21,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Authentification réussie : création de session
+    // Authentification réussie
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['user_pseudo'] = $user['pseudo'];
 
-    // Redirection vers la page d’accueil ou tableau de bord
+    // Redirection après connexion
     header('Location: ../vues/social_media.php');
     exit;
 } else {
     header('Location: ../connexion.php');
     exit;
 }
+// Si la requête n'est pas POST, rediriger vers la page de connexion
+header('Location: ../connexion.php?error=Requête invalide');
