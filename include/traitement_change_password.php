@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-    $stmt = $db->prepare("UPDATE utilisateurs SET mot_de_passe = ? WHERE email = ?");
+    $stmt = $pdo->prepare("UPDATE utilisateurs SET mot_de_passe = ? WHERE email = ?");
     $stmt->execute([$hashedPassword, $email]);
 
     // Nettoyer la session
