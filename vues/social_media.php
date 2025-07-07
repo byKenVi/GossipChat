@@ -1,108 +1,126 @@
+<?php
+// Récupère le nombre de likes pour le post 1
+require_once '../include/database.php';
+$postId = 1;
+$stmt = $pdo->prepare("SELECT nombre_likes FROM articles WHERE id = ?");
+$stmt->execute([$postId]);
+$likes = $stmt->fetchColumn();
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>GossipChat - Accueil</title>
-<link rel="stylesheet" href="../assets/style1.css" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GossipChat - Accueil</title>
+  <link rel="stylesheet" href="../assets/style1.css" />
 </head>
 <body>
-
-<div class="navbar">
-  <div class="logo">GossipChat</div>
-  <div class="search-bar">
-    <input type="search" placeholder="Rechercher...">
-  </div>
-  <div class="icons">
-    <svg class="icon-btn" id="msgIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="Messages" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-    </svg>
-    <svg class="icon-btn" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="Menu" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="3" y1="12" x2="21" y2="12"/>
-      <line x1="3" y1="6" x2="21" y2="6"/>
-      <line x1="3" y1="18" x2="21" y2="18"/>
-    </svg>
-    <svg class="icon-btn" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="Notifications" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
-      <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-    </svg>
-  </div>
-</div>
-
-<div class="main">
-  <div class="sidebar">
-    <div class="menu-item">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 12l18 0" stroke="none"/></svg>
-      <p>Home</p>
+  <div class="navbar">
+    <div class="logo">GossipChat</div>
+    <div class="search-container">
+      <input type="text" placeholder="Rechercher sur GossipChat..." />
     </div>
-    <div class="menu-item">
-      <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
-      <p>Amis</p>
+    <div class="nav-icons">
+      <img src="../img/home.png" alt="Accueil" title="Accueil" class="nav-img" />
+      <img src="../img/message.png" alt="Messagerie" title="Messagerie" class="nav-img" id="msgIcon" />
+      <img src="../img/notification.png" alt="Notifications" title="Notifications" class="nav-img" />
     </div>
-    <div class="menu-item">
-      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16"/></svg>
-      <p>Souvenirs</p>
-    </div>
-    <!-- autres menu items ici -->
   </div>
 
-  <div class="feed">
-    <div class="post">
-      <strong>POST2</strong>
-      <p>Aujourd'hui</p>
-      <img src="https://picsum.photos/600/300" alt="Post Image"/>
-      <div class="actions">
-        <div class="like" title="J'aime">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1 4.5 2.09C12.09 5 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> J'aime
-        </div>
-        <div class="commenter" title="Commenter">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6h-18v12h18v-12zM19 8l-7 5-7-5V6l7 5 7-5v2z"/></svg> Commenter
-        </div>
-        <div class="share" title="Partager">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 8a3 3 0 1 1-3-3"/></svg> Partager
-        </div>
+  <div class="content">
+    <div class="sidebar">
+      <div class="sidebar-item">
+        <img src="../img/friends.png" alt="Amis" /> <span>Amis</span>
+      </div>
+      <div class="sidebar-item">
+        <img src="../img/groups.png" alt="Groupes" /> <span>Groupes</span>
+      </div>
+      <div class="sidebar-item">
+        <img src="../img/saved.png" alt="Sauvegardes" /> <span>Sauvegardes</span>
+      </div>
+      <div class="sidebar-item">
+        <img src="../assets/images/profil.jpg" alt="Photo de profil" /> <span>Profil</span>
       </div>
     </div>
-  </div>
+    <div class="feed">
+            <div class="create-post">
+        <div class="create-post-top">
+          
+            <img src="../assets/images/profil.jpg" alt="Photo de profil" />
+          <input type="text" placeholder="Quoi de neuf, Kevin ?" />
+        </div>
+        <div class="create-post-options">
+          <div class="create-post-option">
+            <img src="../img/live.png" alt="Vidéo en direct" />
+            <span>Vidéo en direct</span>
+          </div>
+          <div class="create-post-option">
+            <img src="../img/photo.png" alt="Photo/vidéo" />
+            <span>Photo/Vidéo</span>
+          </div>
+          <div class="create-post-option">
+            <img src="../img/feeling.png" alt="Humeur/activité" />
+            <span>Humeur/Activité</span>
+          </div>
+        </div>
+      </div>
+      <div class="stories">
+        <div class="story">
+          <img src="../img/story1.jpg" alt="Story 1" />
+          <span>Toi</span>
+        </div>
+        <div class="story">
+          <img src="../img/story2.jpg" alt="Story 2" />
+          <span>Clara</span>
+        </div>
+        <div class="story">
+          <img src="../img/story3.jpg" alt="Story 3" />
+          <span>Marc</span>
+        </div>
+      </div>
+      <div class="post">
+        <div class="post-header">
+          <strong>Clara</strong><br />Aujourd'hui
+        </div>
+        <img src="../img/post1.png" alt="Post image" class="post-img"  />
+        <div class="post-actions">
+          <button class="like-btn" data-postid="1" data-userid="2"><img src="../img/like.png" alt=""></button>
+          <span id="likes-<?= $postId ?>"><?= $likes ?></span>
+          <img src="../img/comment.png" alt="Comment" />
+          <img src="../img/share.png" alt="Share" />
 
-  <div class="messagerie-panel" id="messageriePanel" aria-hidden="true">
-    <header>
-      <h2>Messagerie</h2>
-      <button id="closeMessagerie" aria-label="Fermer la messagerie">&times;</button>
-    </header>
-    <div class="messagerie-list">
-      <div class="messagerie-item">Clément Bankole</div>
-      <div class="messagerie-item">Rolland Rgp</div>
-      <div class="messagerie-item">Aurel Oliveira</div>
-      <div class="messagerie-item">Morel Morel</div>
+        </div>
+        <form class="comment-form" data-postid="1" data-userid="123">
+        <input type="text" placeholder="Écrire un commentaire..." />
+        </form>
+        <div class="comment-list" id="comments-1"></div>
+      </div>
+    </div>
+
+  <div class="messagerie" id="messageriePanel">
+    <div class="messagerie-header">
+      <span>Messagerie</span>
+      <button id="closeMsg">&times;</button>
+    </div>
+    <div class="messagerie-body">
+      <div class="message-user">Rolland Rgp</div>
+      <div class="message-user">Clément Bankole</div>
+      <div class="message-user">Aurel Oliveira</div>
     </div>
   </div>
-</div>
 
-<script>
-  const msgIcon = document.getElementById('msgIcon');
-  const messageriePanel = document.getElementById('messageriePanel');
-  const closeBtn = document.getElementById('closeMessagerie');
+  <script>
+    document.getElementById('msgIcon').addEventListener('click', () => {
+      document.getElementById('messageriePanel').style.right = '0';
+    });
 
-  msgIcon.addEventListener('click', () => {
-    messageriePanel.classList.add('open');
-    messageriePanel.setAttribute('aria-hidden', 'false');
-  });
-
-  closeBtn.addEventListener('click', () => {
-    messageriePanel.classList.remove('open');
-    messageriePanel.setAttribute('aria-hidden', 'true');
-  });
-
-  // Optionnel: fermer messagerie en cliquant hors panneau
-  window.addEventListener('click', (e) => {
-    if (messageriePanel.classList.contains('open') && !messageriePanel.contains(e.target) && e.target !== msgIcon) {
-      messageriePanel.classList.remove('open');
-      messageriePanel.setAttribute('aria-hidden', 'true');
-    }
-  });
-</script>
+    document.getElementById('closeMsg').addEventListener('click', () => {
+      document.getElementById('messageriePanel').style.right = '-300px';
+    });
+  </script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="../public/script.js"></script>
 
 </body>
 </html>
