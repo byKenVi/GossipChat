@@ -1,0 +1,201 @@
+/* Reset et font */
+* {
+  margin: 0; padding: 0; box-sizing: border-box;
+}
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #fff;
+  color: #222;
+  height: 100vh;
+  overflow-x: hidden;
+}
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 60px;
+  background: #fafafa;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 0.05);
+}
+.navbar .logo {
+  font-weight: 700;
+  font-size: 24px;
+  color: darkmagenta;
+  cursor: pointer;
+}
+.navbar .search-bar {
+  flex-grow: 1;
+  max-width: 400px;
+  margin: 0 20px;
+}
+.navbar .search-bar input {
+  width: 100%;
+  padding: 8px 15px;
+  border: 1.5px solid #ccc;
+  border-radius: 30px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+.navbar .search-bar input:focus {
+  border-color: darkmagenta;
+  outline: none;
+}
+.navbar .icons {
+  display: flex;
+  gap: 20px;
+}
+.navbar .icon-btn {
+  cursor: pointer;
+  width: 28px; height: 28px;
+  fill: #666;
+  transition: fill 0.3s;
+}
+.navbar .icon-btn:hover {
+  fill: darkmagenta;
+}
+
+/* Main content */
+.main {
+  margin-top: 60px;
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 0 8px rgb(0 0 0 / 0.05);
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #444;
+  transition: background-color 0.3s;
+}
+.menu-item:hover {
+  background-color: darkmagenta;
+  color: white;
+}
+.menu-item svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* Feed */
+.feed {
+  flex-grow: 1;
+  max-width: 600px;
+}
+.post {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.1);
+  padding: 20px;
+  margin-bottom: 25px;
+}
+.post strong {
+  font-size: 18px;
+}
+.post p {
+  color: #666;
+  margin-top: 5px;
+}
+.post img {
+  margin-top: 15px;
+  border-radius: 12px;
+  width: 100%;
+  object-fit: cover;
+}
+.actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 25px;
+}
+.actions div {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #555;
+  transition: color 0.3s;
+}
+.actions div:hover {
+  color: darkmagenta;
+}
+.actions svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* Messagerie slide panel */
+.messagerie-panel {
+  position: fixed;
+  top: 60px;
+  right: -360px; /* caché à droite */
+  width: 360px;
+  height: calc(100vh - 60px);
+  background: #fff;
+  box-shadow: -3px 0 15px rgba(0,0,0,0.1);
+  border-left: 1px solid #ddd;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: right 0.35s ease-in-out;
+  z-index: 1500;
+}
+.messagerie-panel.open {
+  right: 0;
+}
+.messagerie-panel header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.messagerie-panel header h2 {
+  font-weight: 700;
+  color: darkmagenta;
+}
+.messagerie-panel header button {
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: #999;
+}
+.messagerie-panel header button:hover {
+  color: darkmagenta;
+}
+.messagerie-list {
+  margin-top: 20px;
+  overflow-y: auto;
+  max-height: calc(100% - 60px);
+}
+.messagerie-item {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f4f4f4;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #333;
+  transition: background-color 0.3s;
+}
+.messagerie-item:hover {
+  background-color: #e0d3f5;
+}

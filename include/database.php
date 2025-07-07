@@ -14,13 +14,7 @@ $options = [
 ];
 
 try {
-    $db = new PDO($dsn, $user, $pass, $options);
+  $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
     exit('Erreur connexion BDD : ' . $e->getMessage());
-}
-// Fonction pour vérifier si un utilisateur existe déjà
-function userExists($pdo, $email) {
-    $stmt = $pdo->prepare('SELECT COUNT(*) FROM users WHERE email = ?');
-    $stmt->execute([$email]);
-    return $stmt->fetchColumn() > 0;
 }
