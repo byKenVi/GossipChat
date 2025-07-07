@@ -24,7 +24,7 @@ $email = $_SESSION['reset_email'] ?? '';
       <h2>VALIDATION CODE</h2>
       <label for="email">E-mail</label>
       <input type="email" id="email" name="email" required />
-
+      <p>saisissez le code qui a été envoyé dans votre mail</p>
       <label for="code">Entrer le code</label>
       <input type="code" id="code" name="code" required />
 
