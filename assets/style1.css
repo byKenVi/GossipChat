@@ -306,3 +306,84 @@ body {
   cursor: pointer;
   color: darkmagenta;
 }
+/* Overlay pour assombrir l’arrière-plan */
+#comment-popup .popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Contenu du popup */
+#comment-popup .popup-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 90%;
+  max-width: 450px;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+}
+
+#comment-popup h3 {
+  margin-top: 0;
+  color: darkmagenta;
+  font-size: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.comment-list {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.comment-list p {
+  margin: 8px 0;
+  padding: 6px 10px;
+  background: #f7f7f7;
+  border-radius: 6px;
+  font-size: 14px;
+  border-left: 3px solid darkmagenta;
+}
+
+/* Champ de saisie */
+#comment-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+/* Boutons */
+.comment-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.comment-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: darkmagenta;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.comment-actions button:hover {
+  background: #9b0063;
+}

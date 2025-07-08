@@ -1,8 +1,18 @@
 <?php
-// Récupère le nombre de likes pour le post 1
+session_start();
 require_once '../include/database.php';
-$postId = 1;
-$stmt = $pdo->prepare("SELECT nombre_likes FROM articles WHERE id = ?");
+
+// Vérifie que l'utilisateur est connecté
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../connexion.php");
+    exit;
+}
+
+$userId = $_SESSION['user_id'];
+$postId = 1; // à remplacer par une boucle de post dans un vrai fil d'actualité
+
+// Nombre de likes sur le post
+$stmt = $pdo->prepare("SELECT count(*) FROM likes WHERE article_id = ?");
 $stmt->execute([$postId]);
 $likes = $stmt->fetchColumn();
 ?>
@@ -22,105 +32,90 @@ $likes = $stmt->fetchColumn();
       <input type="text" placeholder="Rechercher sur GossipChat..." />
     </div>
     <div class="nav-icons">
-      <img src="../img/home.png" alt="Accueil" title="Accueil" class="nav-img" />
-      <img src="../img/message.png" alt="Messagerie" title="Messagerie" class="nav-img" id="msgIcon" />
-      <img src="../img/notification.png" alt="Notifications" title="Notifications" class="nav-img" />
+      <img src="../img/home.png" class="nav-img" />
+      <img src="../img/message.png" class="nav-img" id="msgIcon" />
+      <img src="../img/notification.png" class="nav-img" />
     </div>
   </div>
 
   <div class="content">
     <div class="sidebar">
-      <div class="sidebar-item">
-        <img src="../img/friends.png" alt="Amis" /> <span>Amis</span>
-      </div>
-      <div class="sidebar-item">
-        <img src="../img/groups.png" alt="Groupes" /> <span>Groupes</span>
-      </div>
-      <div class="sidebar-item">
-        <img src="../img/saved.png" alt="Sauvegardes" /> <span>Sauvegardes</span>
-      </div>
-      <div class="sidebar-item">
-        <img src="../assets/images/profil.jpg" alt="Photo de profil" /> <span>Profil</span>
-      </div>
+      <div class="sidebar-item"><img src="../img/friends.png" /><span>Amis</span></div>
+      <div class="sidebar-item"><img src="../img/groups.png" /><span>Groupes</span></div>
+      <div class="sidebar-item"><img src="../img/saved.png" /><span>Sauvegardes</span></div>
+      <div class="sidebar-item"><img src="../assets/images/profil.jpg" /><span>Profil</span></div>
     </div>
+
     <div class="feed">
-            <div class="create-post">
+      <div class="create-post">
         <div class="create-post-top">
-          
-            <img src="../assets/images/profil.jpg" alt="Photo de profil" />
+          <img src="../assets/images/profil.jpg" />
           <input type="text" placeholder="Quoi de neuf, Kevin ?" />
         </div>
         <div class="create-post-options">
-          <div class="create-post-option">
-            <img src="../img/live.png" alt="Vidéo en direct" />
-            <span>Vidéo en direct</span>
-          </div>
-          <div class="create-post-option">
-            <img src="../img/photo.png" alt="Photo/vidéo" />
-            <span>Photo/Vidéo</span>
-          </div>
-          <div class="create-post-option">
-            <img src="../img/feeling.png" alt="Humeur/activité" />
-            <span>Humeur/Activité</span>
-          </div>
+          <div class="create-post-option"><img src="../img/live.png" /><span>Vidéo en direct</span></div>
+          <div class="create-post-option"><img src="../img/photo.png" /><span>Photo/vidéo</span></div>
+          <div class="create-post-option"><img src="../img/feeling.png" /><span>Humeur/Activité</span></div>
         </div>
       </div>
+
       <div class="stories">
-        <div class="story">
-          <img src="../img/story1.jpg" alt="Story 1" />
-          <span>Toi</span>
-        </div>
-        <div class="story">
-          <img src="../img/story2.jpg" alt="Story 2" />
-          <span>Clara</span>
-        </div>
-        <div class="story">
-          <img src="../img/story3.jpg" alt="Story 3" />
-          <span>Marc</span>
-        </div>
+        <div class="story"><img src="../img/story1.jpg" /><span>Toi</span></div>
+        <div class="story"><img src="../img/story2.jpg" /><span>Clara</span></div>
+        <div class="story"><img src="../img/story3.jpg" /><span>Marc</span></div>
       </div>
+
       <div class="post">
-        <div class="post-header">
-          <strong>Clara</strong><br />Aujourd'hui
-        </div>
-        <img src="../img/post1.png" alt="Post image" class="post-img"  />
-        <div class="post-actions">
-          <button class="like-btn" data-postid="1" data-userid="2"><img src="../img/like.png" alt=""></button>
-          <span id="likes-<?= $postId ?>"><?= $likes ?></span>
-          <img src="../img/comment.png" alt="Comment" />
-          <img src="../img/share.png" alt="Share" />
+        <div class="post-header"><strong>Clara</strong><br />Aujourd'hui</div>
+        <img src="../img/post1.png" class="post-img" />
 
+        <div class="post-actions">
+          <button class="like-btn" data-postid="<?= $postId ?>" data-userid="<?= $userId ?>">
+            <img src="../img/like.png" alt="Like">
+          </button>
+          <span id="likes-<?= $postId ?>"><?= $likes ?></span>
+          <img src="../img/comment.png" alt="Comment" class="comment-icon" data-postid="<?= $postId ?>" data-userid="<?= $userId ?>" style="cursor:pointer; width:24px;" />
+          <img src="../img/share.png" alt="Share" class="comment-icon" data-postid="<?= $postId ?>" data-userid="<?= $userId ?>" style="cursor:pointer; width:24px;" />
         </div>
-        <form class="comment-form" data-postid="1" data-userid="123">
-        <input type="text" placeholder="Écrire un commentaire..." />
-        </form>
-        <div class="comment-list" id="comments-1"></div>
+
+          <div id="comment-popup" style="display:none;">
+      <div class="popup-overlay" onclick="closeCommentPopup()"></div>
+      <div class="popup-content">
+        <h3>Commentaires</h3>
+        <div id="comment-list" class="comment-list"></div>
+        <input type="text" id="comment-input" placeholder="Votre commentaire...">
+        <div class="comment-actions">
+          <button id="submit-comment">Envoyer</button>
+          <button onclick="closeCommentPopup()">Fermer</button>
+        </div>
       </div>
     </div>
 
-  <div class="messagerie" id="messageriePanel">
-    <div class="messagerie-header">
-      <span>Messagerie</span>
-      <button id="closeMsg">&times;</button>
+      </div>
     </div>
-    <div class="messagerie-body">
-      <div class="message-user">Rolland Rgp</div>
-      <div class="message-user">Clément Bankole</div>
-      <div class="message-user">Aurel Oliveira</div>
+
+    <div class="messagerie" id="messageriePanel">
+      <div class="messagerie-header">
+        <span>Messagerie</span>
+        <button id="closeMsg">&times;</button>
+      </div>
+      <div class="messagerie-body">
+        <div class="message-user">Rolland Rgp</div>
+        <div class="message-user">Clément Bankole</div>
+        <div class="message-user">Aurel Oliveira</div>
+      </div>
     </div>
-  </div>
 
-  <script>
-    document.getElementById('msgIcon').addEventListener('click', () => {
-      document.getElementById('messageriePanel').style.right = '0';
-    });
+    <script>
+      document.getElementById('msgIcon').addEventListener('click', () => {
+        document.getElementById('messageriePanel').style.right = '0';
+      });
+      document.getElementById('closeMsg').addEventListener('click', () => {
+        document.getElementById('messageriePanel').style.right = '-300px';
+      });
+    </script>
 
-    document.getElementById('closeMsg').addEventListener('click', () => {
-      document.getElementById('messageriePanel').style.right = '-300px';
-    });
-  </script>
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-<script src="../public/script.js"></script>
-
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="../public/script.js"></script>
 </body>
 </html>

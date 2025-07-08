@@ -31,5 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     unset($_SESSION['verified_email']);
     unset($_SESSION['reset_email']);
 
-    echo "Mot de passe changé avec succès. <a href='../connexion.php'>Se connecter</a>";
+    header("Location: ../connexion.php?");
 }
+    
