@@ -4,10 +4,12 @@ require_once 'database.php';
 header('Content-Type: application/json; charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $photo_profil = trim($_POST['photo_profil'] ?? '');
     $nom = trim($_POST['nom'] ?? '');
     $prenom = trim($_POST['prenom'] ?? '');
     $pseudo = trim($_POST['username'] ?? '');
     $email = trim($_POST['email'] ?? '');
+    $photo = trim($_POST['photo_profil'] ?? '');
     $mot_de_passe = $_POST['password'] ?? '';
     $passwordConfirm = $_POST['passwordConfirm'] ?? '';
 

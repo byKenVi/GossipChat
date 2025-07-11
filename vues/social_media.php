@@ -35,6 +35,11 @@ $likes = $stmt->fetchColumn();
       <img src="../img/home.png" class="nav-img" />
       <img src="../img/message.png" class="nav-img" id="msgIcon" />
       <img src="../img/notification.png" class="nav-img" />
+      <a href="../vues/profil.php">
+        <img src="../img/profil.png" class="nav-img"/>
+      </a>
+      
+    
     </div>
   </div>
 

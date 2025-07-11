@@ -23,7 +23,7 @@
       <label for="motdepasse">Mot de passe</label>
       <input type="password" id="motdepasse" name="motdepasse" required />
 
-      <button type="submit">Se connecter</button>
+      <button type="submit">Connexion</button>
 
       <div id="msgConnexion"></div>
     </form>

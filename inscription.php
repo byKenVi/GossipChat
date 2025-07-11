@@ -15,8 +15,14 @@
   </header>
 
   <main>
-    <form id="formInscription" class="fade-in" method="POST" action="include/traitement_inscription.php" novalidate>
+    <form id="formInscription" class="fade-in" method="POST" action="include/traitement_inscription.php"
+     novalidate enctype="multipart/form-data">
       <h2>Créer un compte</h2>
+
+      <label for="photo_profil">Photo de profil</label><br>
+      <img src="../img/<?= htmlspecialchars($user['photo_profil'] ?? 'default.jpg') ?>" alt="Photo de profil" width="100"><br>
+      <input type="file" name="photo_profil">
+
 
       <label for="nom">Nom</label>
       <input type="text" id="nom" name="nom" required autofocus />
@@ -29,6 +35,9 @@
 
       <label for="email">E-mail</label>
       <input type="email" id="email" name="email" required />
+
+      <label for="photo_profil">photo de profil</label>
+      <input type="file" name="photo_profil" required>
 
       <label for="password">Mot de passe</label>
       <input type="password" id="password" name="password" required />
