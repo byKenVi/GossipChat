@@ -83,7 +83,7 @@ document.getElementById('submit-comment').addEventListener('click', () => {
         username: data.username,
         comment: data.comment
       });
-      addCommentToList(data.username, data.comment); // Ajoute pour l'expéditeur aussi
+      addCommentToList(data.username, data.comment); // Ajoute le commentaire à la liste
     }
   })
   .catch(console.error);

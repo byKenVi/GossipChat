@@ -23,6 +23,11 @@ io.on("connection", (socket) => {
      socket.broadcast.emit('newComment', data); // broadcast à tous
   });
 
+  socket.on("newPost", (data) => {
+  io.emit("newPost", data); // envoie à tous
+});
+
+
   socket.on("disconnect", () => {
     console.log("Déconnecté :", socket.id);
   });
