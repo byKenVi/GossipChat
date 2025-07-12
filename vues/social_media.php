@@ -48,10 +48,10 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <div class="content">
     <div class="sidebar">
-      <div class="sidebar-item"><img src="../img/friends.png" /><span>   <a href="../public/amis.php">Amis</a></span>   </div>
-      <div class="sidebar-item"><img src="../img/groups.png" /><span>   <a href="../vues/groupes.php">Groupes</a></span>   </div>
-      <div class="sidebar-item"><img src="../img/saved.png" /><span>   <a href="../vues/sauvegardes.php">Sauvegardes</a></span>   </div>
-      <div class="sidebar-item"><img src="../assets/images/profil.jpg" /><span>   <a href="../vues/profil.php">Profil</a></span>   </div>
+      <div class="sidebar-item"><img src="../img/friends.png" /><span>   <a href="../public/amis.php">Amis</a></span>   </div><br><br>
+      <div class="sidebar-item"><img src="../img/groups.png" /><span>   <a href="../vues/groupes.php">Groupes</a></span> </div><br><br>
+      <div class="sidebar-item"><img src="../img/saved.png" /><span>   <a href="../vues/sauvegardes.php">Sauvegardes</a></span> </div><br><br>
+      <div class="sidebar-item"><img src="../assets/images/profil.jpg" /><span>   <a href="../vues/profil.php">Profil</a></span>   </div><br><br>
     </div>
 
     <div class="feed">
@@ -94,15 +94,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endforeach; ?>
       </div>
     </div>
-      <div class="chat-header">
-        Discussion avec <span id="chat-username">[Nom]</span>
-        <button onclick="closeChat()">X</button>
-      </div>
-      <div class="chat-messages" id="chat-messages"></div>
-      <div class="chat-input">
-        <input type="text" id="chat-input" placeholder="Votre message...">
-        <button onclick="sendMessage()">Envoyer</button>
-      </div>
+      
+      
     </div>
 
   </div>
