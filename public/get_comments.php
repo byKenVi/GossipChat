@@ -1,21 +1,24 @@
 <?php
+session_start();
+require_once '../include/database.php';
 header('Content-Type: application/json');
-require_once '../include/database.php'; 
 
 $postId = isset($_GET['postId']) ? intval($_GET['postId']) : 0;
-if (!$postId) {
+
+if ($postId === 0) {
     echo json_encode([]);
     exit;
 }
 
 $stmt = $pdo->prepare("
-  SELECT commentaires.contenu, utilisateurs.pseudo
-  FROM commentaires
-  JOIN utilisateurs ON utilisateurs.id = commentaires.utilisateur_id
-  WHERE commentaires.article_id = ?
-  ORDER BY commentaires.date_commentaire ASC
+  SELECT c.contenu, u.pseudo
+  FROM commentaires c
+  JOIN utilisateurs u ON c.utilisateur_id = u.id
+  WHERE c.article_id = ?
+  ORDER BY c.date_commentaire ASC
 ");
 $stmt->execute([$postId]);
-echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+$comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+echo json_encode($comments);
 ?>

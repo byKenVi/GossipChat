@@ -1,56 +1,108 @@
-const socket = io("http://localhost:3000");
-
-// Like handler
-document.querySelectorAll(".like-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const postId = btn.dataset.postid;
-    const userId = btn.dataset.userid;
-
-    fetch('../public/like_post.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `postId=${postId}&userId=${userId}`
-    })
-    .then(res => res.json())
-    .then(data => {
-      const likeCounter = document.querySelector(`#likes-${postId}`);
-      if (likeCounter && data.likes !== undefined) {
-        likeCounter.textContent = data.likes;
-      }
-      socket.emit("like", data); // Envoie à tous
-    })
-    .catch(console.error);
-  });
-});
-
-// Mise à jour en temps réel des likes
-socket.on("likeUpdate", (data) => {
-  const likeCounter = document.querySelector(`#likes-${data.postId}`);
-  if (likeCounter && data.likes !== undefined) {
-    likeCounter.textContent = data.likes;
-  }
-});
-
-// Variables de suivi
-let currentPostId = null;
-let currentUserId = null;
-
-// Ouverture du popup de commentaire
-document.querySelectorAll('.comment-icon').forEach(icon => {
-  icon.addEventListener('click', () => {
-    currentPostId = icon.dataset.postid;
-    currentUserId = icon.dataset.userid;
-
-    document.getElementById('comment-popup').style.display = 'block';
-    loadComments(currentPostId);
-  });
-});
-
-function closeCommentPopup() {
-  document.getElementById('comment-popup').style.display = 'none';
+// script.js corrigé avec console.log pour debug des publications temps réel
+function formatHeure(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-// Chargement des commentaires
+const postsContainer = document.getElementById('posts-container');
+
+console.log("✅ Connexion Socket.IO en cours...");
+
+// Charger les posts au chargement initial
+function loadPosts() {
+  fetch('../public/get_post.php')
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        postsContainer.innerHTML = '';
+        data.posts.forEach(post => {
+          const postElement = createPostElement(post);
+          postsContainer.appendChild(postElement);
+        });
+      } else {
+        console.error("❌ Erreur dans la réponse get_post.php", data);
+      }
+    })
+    .catch(err => console.error("❌ Erreur fetch get_post.php:", err));
+}
+
+loadPosts();
+
+function createPostElement(post) {
+  const div = document.createElement('div');
+  div.classList.add('post');
+
+  const userName = post.username;
+  const media = post.media_path ? (post.media_type === 'image' ?
+    `<img src="${post.media_path}" alt="media" />` :
+    `<video src="${post.media_path}" controls></video>`) : '';
+
+  div.innerHTML = `
+    <p><strong>${userName}</strong></p>
+    <p>${post.description}</p>
+    ${media}
+    <button class="like-btn" data-postid="${post.id}">❤️ Like</button>
+    <span id="likes-${post.id}">${post.like_count ?? 0}</span>
+    <button class="comment-icon" data-postid="${post.id}">💬 Commenter</button>
+  `;
+
+  div.querySelector('.like-btn').addEventListener('click', handleLike);
+  div.querySelector('.comment-icon').addEventListener('click', openCommentPopup);
+
+  return div;
+}
+
+function handleLike(e) {
+  const btn = e.target.closest('button');
+  const postId = btn.dataset.postid;
+
+  fetch('../public/like_post.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `postId=${postId}`
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log("🔁 Like réponse:", data);
+    const counter = document.getElementById(`likes-${data.postId}`);
+    const button = document.querySelector(`.like-btn[data-postid="${data.postId}"]`);
+
+    if (counter) counter.textContent = data.likes;
+    if (button) button.style.color = data.action === 'liked' ? 'blue' : 'black';
+
+    socket.emit('like', data);
+  })
+  .catch(console.error);
+}
+
+socket.on('likeUpdate', data => {
+  console.log("📡 Like reçu via WebSocket:", data);
+  const counter = document.getElementById(`likes-${data.postId}`);
+  const button = document.querySelector(`.like-btn[data-postid="${data.postId}"]`);
+
+  if (counter) counter.textContent = data.likes;
+  if (button) button.style.color = data.action === 'liked' ? 'blue' : 'black';
+});
+
+let currentPostId = null;
+
+function openCommentPopup(e) {
+  const postId = e.target.dataset.postid;
+  currentPostId = postId;
+  console.log("💬 Ouverture popup commentaire pour le post:", postId);
+
+  const popup = document.getElementById('comment-popup');
+  if (popup) {
+    popup.style.display = 'block';
+    loadComments(postId);
+  }
+}
+
+function closeCommentPopup() {
+  const popup = document.getElementById('comment-popup');
+  if (popup) popup.style.display = 'none';
+}
+
 function loadComments(postId) {
   fetch(`../public/get_comments.php?postId=${postId}`)
     .then(res => res.json())
@@ -64,42 +116,77 @@ function loadComments(postId) {
     .catch(console.error);
 }
 
-// Envoi d'un commentaire
-document.getElementById('submit-comment').addEventListener('click', () => {
-  const content = document.getElementById('comment-input').value.trim();
-  if (!content || !currentPostId || !currentUserId) return;
-
-  fetch('../public/comment_post.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `postId=${currentPostId}&userId=${currentUserId}&comment=${encodeURIComponent(content)}`
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      document.getElementById('comment-input').value = '';
-      socket.emit('newComment', {
-        postId: currentPostId,
-        username: data.username,
-        comment: data.comment
-      });
-      addCommentToList(data.username, data.comment); // Ajoute le commentaire à la liste
-    }
-  })
-  .catch(console.error);
-});
-
-// Ajout d'un commentaire dans la liste
 function addCommentToList(username, comment) {
   const p = document.createElement('p');
   p.textContent = `${username}: ${comment}`;
   document.getElementById('comment-list').appendChild(p);
 }
 
-// Réception en temps réel des commentaires
+// Envoi du commentaire
+
+document.getElementById('submit-comment')?.addEventListener('click', () => {
+  const content = document.getElementById('comment-input').value.trim();
+  if (!content || !currentPostId) return;
+
+  fetch('../public/comment_post.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `postId=${currentPostId}&comment=${encodeURIComponent(content)}`
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      console.log("✏️ Commentaire envoyé:", data);
+      document.getElementById('comment-input').value = '';
+      socket.emit('newComment', {
+        postId: currentPostId,
+        username: data.username,
+        comment: data.comment
+      });
+      addCommentToList(data.username, data.comment);
+    }
+  })
+  .catch(console.error);
+});
+
 socket.on('newComment', data => {
+  console.log("📡 Commentaire reçu:", data);
   const popupVisible = document.getElementById("comment-popup").style.display === "block";
   if (popupVisible && parseInt(data.postId) === parseInt(currentPostId)) {
     addCommentToList(data.username, data.comment);
+  }
+});
+
+// Soumission du post (création)
+
+document.getElementById('post-form')?.addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const formData = new FormData(form);
+
+  fetch('../public/post_article.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success && data.post) {
+      console.log("📤 Nouveau post publié localement:", data.post);
+      const postElement = createPostElement(data.post);
+      postsContainer.prepend(postElement);
+
+      socket.emit("newPost", data.post);
+    }
+  })
+  .catch(console.error);
+});
+
+// Réception d'un post émis par un autre utilisateur
+socket.on("newPost", post => {
+  console.log("📥 Post reçu via WebSocket:", post);
+  if (parseInt(post.user_id) !== parseInt(USER_ID)) {
+    const postElement = createPostElement(post);
+    postsContainer.prepend(postElement);
   }
 });

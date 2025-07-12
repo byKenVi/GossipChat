@@ -1,38 +1,33 @@
 <?php
-header('Content-Type: application/json');
+session_start();
 require_once '../include/database.php';
+header('Content-Type: application/json');
 
-if (!isset($_POST['postId'], $_POST['userId'], $_POST['comment'])) {
-  echo json_encode(['success' => false, 'error' => 'Paramètres manquants']);
-  exit;
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['success' => false, 'error' => 'Non connecté']);
+    exit;
 }
 
-$postId = intval($_POST['postId']);
-$userId = intval($_POST['userId']);
-$comment = trim($_POST['comment']);
+$postId = intval($_POST['postId'] ?? 0);
+$comment = trim($_POST['comment'] ?? '');
+$userId = intval($_SESSION['user_id']);
 
-if ($postId === 0 || $userId === 0 || $comment === '') {
-  echo json_encode(['success' => false, 'error' => 'Entrées invalides']);
-  exit;
+if ($postId === 0 || $comment === '') {
+    echo json_encode(['success' => false, 'error' => 'Champs manquants']);
+    exit;
 }
 
-// Insertion dans la table commentaires
-$stmt = $pdo->prepare("
-  INSERT INTO commentaires (article_id, utilisateur_id, contenu, date_commentaire)
-  VALUES (?, ?, ?, NOW())
-");
+$stmt = $pdo->prepare("INSERT INTO commentaires (article_id, utilisateur_id, contenu, date_commentaire) VALUES (?, ?, ?, NOW())");
 $stmt->execute([$postId, $userId, $comment]);
 
-// Récupérer le pseudo pour le retour
 $userStmt = $pdo->prepare("SELECT pseudo FROM utilisateurs WHERE id = ?");
 $userStmt->execute([$userId]);
-$user = $userStmt->fetch();
+$username = $userStmt->fetchColumn();
 
 echo json_encode([
-  'success' => true,
-  'postId' => $postId,
-  'userId' => $userId,
-  'comment' => $comment,
-  'username' => $user['pseudo']
+    'success' => true,
+    'postId' => $postId,
+    'comment' => htmlspecialchars($comment),
+    'username' => $username
 ]);
 ?>
