@@ -388,3 +388,12 @@ body {
 .comment-actions button:hover {
   background: #9b0063;
 }
+
+.post-img {
+  max-width: 40%;
+  max-height: 40%;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-top: 5%;
+}
+
