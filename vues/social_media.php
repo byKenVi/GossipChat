@@ -8,6 +8,11 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $userId = $_SESSION['user_id'];
+
+// Récupérer la liste des autres utilisateurs pour la messagerie
+$stmt = $pdo->prepare("SELECT id, pseudo FROM utilisateurs WHERE id != ?");
+$stmt->execute([$userId]);
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -17,6 +22,13 @@ $userId = $_SESSION['user_id'];
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GossipChat - Accueil</title>
   <link rel="stylesheet" href="../assets/style1.css" />
+ <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+<script>
+  const socket = io("http://localhost:3000");
+  const USER_ID = <?= json_encode($userId) ?>;
+</script>
+
 </head>
 <body>
   <div class="navbar">
@@ -36,10 +48,10 @@ $userId = $_SESSION['user_id'];
 
   <div class="content">
     <div class="sidebar">
-      <div class="sidebar-item"><img src="../img/friends.png" /><span>Amis</span></div>
-      <div class="sidebar-item"><img src="../img/groups.png" /><span>Groupes</span></div>
-      <div class="sidebar-item"><img src="../img/saved.png" /><span>Sauvegardes</span></div>
-      <div class="sidebar-item"><img src="../assets/images/profil.jpg" /><span>Profil</span></div>
+      <div class="sidebar-item"><img src="../img/friends.png" /><span>   <a href="../public/amis.php">Amis</a></span>   </div>
+      <div class="sidebar-item"><img src="../img/groups.png" /><span>   <a href="../vues/groupes.php">Groupes</a></span>   </div>
+      <div class="sidebar-item"><img src="../img/saved.png" /><span>   <a href="../vues/sauvegardes.php">Sauvegardes</a></span>   </div>
+      <div class="sidebar-item"><img src="../assets/images/profil.jpg" /><span>   <a href="../vues/profil.php">Profil</a></span>   </div>
     </div>
 
     <div class="feed">
@@ -65,7 +77,8 @@ $userId = $_SESSION['user_id'];
         <div class="story"><img src="../img/story3.jpg" /><span>Marc</span></div>
       </div>
 
-      <div class="posts-container"></div>
+      <div class="posts-container" id="posts-container"></div>
+
     </div>
 
     <div class="messagerie" id="messageriePanel">
@@ -74,26 +87,39 @@ $userId = $_SESSION['user_id'];
         <button id="closeMsg">&times;</button>
       </div>
       <div class="messagerie-body">
-        <div class="message-user">Rolland Rgp</div>
-        <div class="message-user">Clément Bankole</div>
-        <div class="message-user">Aurel Oliveira</div>
+        <?php foreach ($users as $user): ?>
+          <div class="message-user" onclick="openChatWith(<?= $user['id'] ?>, '<?= htmlspecialchars($user['pseudo']) ?>')">
+            <?= htmlspecialchars($user['pseudo']) ?>
+          </div>
+        <?php endforeach; ?>
       </div>
     </div>
-  </div>
+      <div class="chat-header">
+        Discussion avec <span id="chat-username">[Nom]</span>
+        <button onclick="closeChat()">X</button>
+      </div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input">
+        <input type="text" id="chat-input" placeholder="Votre message...">
+        <button onclick="sendMessage()">Envoyer</button>
+      </div>
+    </div>
 
-  <!-- Popup commentaire partagé -->
-  <div id="comment-popup" style="display:none;">
-    <div class="popup-overlay" onclick="closeCommentPopup()"></div>
-    <div class="popup-content">
-      <h3>Commentaires</h3>
-      <div id="comment-list" class="comment-list"></div>
-      <input type="text" id="comment-input" placeholder="Votre commentaire...">
-      <div class="comment-actions">
-        <button id="submit-comment">Envoyer</button>
-        <button onclick="closeCommentPopup()">Fermer</button>
-      </div>
+  </div>
+  <!-- Popup Commentaire -->
+<div id="comment-popup" style="display: none;">
+  <div class="popup-overlay" onclick="closeCommentPopup()"></div>
+  <div class="popup-content">
+    <h3>Commentaires</h3>
+    <div id="comment-list" class="comment-list"></div>
+    <input type="text" id="comment-input" placeholder="Votre commentaire...">
+    <div class="comment-actions">
+      <button id="submit-comment">Envoyer</button>
+      <button onclick="closeCommentPopup()">Fermer</button>
     </div>
   </div>
+</div>
+
 
   <script>
     document.getElementById('msgIcon').addEventListener('click', () => {
@@ -102,15 +128,11 @@ $userId = $_SESSION['user_id'];
     document.getElementById('closeMsg').addEventListener('click', () => {
       document.getElementById('messageriePanel').style.right = '-300px';
     });
-  </script>
 
-  <script>
-    const USER_ID = <?= json_encode($userId) ?>;
   </script>
-
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-  <script src="../public/script.js"></script> <!-- Celui qui gère likes et commentaires -->
-  <script src="../public/script_post.js"></script> <!-- Celui-ci pour les publications -->
+<!-- Scripts JS -->
+<script src="../public/script.js"></script>
+<script src="../public/messagerie.js"></script>
 
 </body>
 </html>

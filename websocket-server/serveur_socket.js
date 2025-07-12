@@ -1,8 +1,9 @@
+// 📄 serveur_socket.js (Socket.io complet pour GossipChat)
+
 const http = require("http");
 const { Server } = require("socket.io");
 
 const server = http.createServer();
-
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -11,28 +12,34 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("Connecté :", socket.id);
+  console.log("✅ Utilisateur connecté:", socket.id);
 
-  // Logique quand un utilisateur like une publication
+  // Réception d’un nouveau like
   socket.on("like", (data) => {
-    console.log("Like reçu :", data);
-    io.emit("likeUpdate", data); // Diffuse à tous les clients
+    io.emit("likeUpdate", data);
   });
 
-  socket.on('newComment', (data) => {
-     socket.broadcast.emit('newComment', data); // broadcast à tous
+  // Réception d’un nouveau commentaire
+  socket.on("newComment", (data) => {
+    socket.broadcast.emit("newComment", data);
   });
 
+  // Réception d’un nouveau post
   socket.on("newPost", (data) => {
-  io.emit("newPost", data); // envoie à tous
-});
+    socket.broadcast.emit("newPost", data);
+  });
 
+  // 📩 Réception d’un nouveau message privé
+  socket.on("newMessage", (msg) => {
+    console.log("📩 Nouveau message reçu :", msg);
+    io.emit("newMessage", msg); 
+  });
 
   socket.on("disconnect", () => {
-    console.log("Déconnecté :", socket.id);
+    console.log("❌ Utilisateur déconnecté:", socket.id);
   });
 });
 
 server.listen(3000, () => {
-  console.log("WebSocket server running on http://localhost:3000");
+  console.log("Serveur Socket.io en cours d'exécution sur http://localhost:3000");
 });

@@ -1,41 +1,52 @@
 <?php
 require_once '../include/database.php';
 header('Content-Type: application/json');
+session_start();
 
-$postId = isset($_POST['postId']) ? intval($_POST['postId']) : null;
-$userId = isset($_POST['userId']) ? intval($_POST['userId']) : null;
+// Vérifie si l'utilisateur est bien connecté
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['success' => false, 'error' => 'Utilisateur non connecté']);
+    exit;
+}
 
-if (!$postId || !$userId) {
+$userId = intval($_SESSION['user_id']);
+$postId = isset($_POST['postId']) ? intval($_POST['postId']) : 0;
+
+if ($postId === 0) {
     echo json_encode(['success' => false, 'error' => 'Paramètres manquants']);
     exit;
 }
 
 try {
-    // Vérifie si l'utilisateur a déjà liké ce post
+    // Vérifier si le like existe déjà
     $stmt = $pdo->prepare("SELECT id FROM likes WHERE article_id = ? AND utilisateur_id = ?");
     $stmt->execute([$postId, $userId]);
 
     if ($stmt->rowCount() > 0) {
-        // UNLIKE
+        // Déjà liké ➔ on retire le like
         $pdo->prepare("DELETE FROM likes WHERE article_id = ? AND utilisateur_id = ?")->execute([$postId, $userId]);
         $action = 'unliked';
     } else {
-        // LIKE
-        $pdo->prepare("INSERT INTO likes (article_id, utilisateur_id) VALUES (?, ?)")->execute([$postId, $userId]);
+        // Pas encore liké ➔ on ajoute le like
+        $pdo->prepare("INSERT INTO likes (article_id, utilisateur_id, type) VALUES (?, ?, 'like')")->execute([$postId, $userId]);
         $action = 'liked';
     }
 
-    // Nombre total de likes du post
+    // Compter le nombre total de likes
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM likes WHERE article_id = ?");
     $stmt->execute([$postId]);
     $likeCount = (int)$stmt->fetchColumn();
 
+    // Réponse au format JSON
     echo json_encode([
         'success' => true,
         'action' => $action,
         'postId' => $postId,
-        'likes' => $likeCount
+        'likes' => $likeCount,
+        'userId' => $userId
     ]);
+
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }
+?>
