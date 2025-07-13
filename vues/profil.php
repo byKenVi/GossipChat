@@ -33,7 +33,7 @@ if (!$user) {
  </head>
 <body>
   <header>
-    <a href="index.php">
+    <a href="social_media.php">
       <img src="../assets/images/logochat.png" alt="logo GossipChat" class="logo-pulse" style="width:56px; height:56px; margin:1rem;" />
     </a>
   </header>
