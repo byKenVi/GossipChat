@@ -9,6 +9,12 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $userId = $_SESSION['user_id'];
+
+// Récupère la photo de profil de l'utilisateur connecté
+$stmt = $pdo->prepare("SELECT pseudo, photo_profil FROM utilisateurs WHERE id = ?");
+$stmt->execute([$userId]);
+$user = $stmt->fetch();
+
 $postId = 1; // à remplacer par une boucle de post dans un vrai fil d'actualité
 
 // Nombre de likes sur le post
@@ -35,11 +41,6 @@ $likes = $stmt->fetchColumn();
       <img src="../img/home.png" class="nav-img" />
       <img src="../img/message.png" class="nav-img" id="msgIcon" />
       <img src="../img/notification.png" class="nav-img" />
-      <a href="../vues/profil.php">
-        <img src="../img/profil.png" class="nav-img"/>
-      </a>
-      
-    
     </div>
   </div>
 
@@ -48,14 +49,21 @@ $likes = $stmt->fetchColumn();
       <div class="sidebar-item"><img src="../img/friends.png" /><span>Amis</span></div>
       <div class="sidebar-item"><img src="../img/groups.png" /><span>Groupes</span></div>
       <div class="sidebar-item"><img src="../img/saved.png" /><span>Sauvegardes</span></div>
-      <div class="sidebar-item"><img src="../assets/images/profil.jpg" /><span>Profil</span></div>
+
+
+      <a href="../vues/profil.php">
+        <div class="sidebar-item">
+          <img src="../img/<?= htmlspecialchars($user['photo_profil'] ?? 'default.jpg') ?>" />
+          <span>Profil</span>
+        </div>
+      </a>
     </div>
 
     <div class="feed">
       <div class="create-post">
         <div class="create-post-top">
-          <img src="../assets/images/profil.jpg" />
-          <input type="text" placeholder="Quoi de neuf, Kevin ?" />
+          <img src="../img/<?= htmlspecialchars($user['photo_profil'] ?? 'default.jpg') ?>" />
+          <input type="text" placeholder="Quoi de neuf, <?= htmlspecialchars($user['pseudo']) ?> ?" />
         </div>
         <div class="create-post-options">
           <div class="create-post-option"><img src="../img/live.png" /><span>Vidéo en direct</span></div>
@@ -83,18 +91,18 @@ $likes = $stmt->fetchColumn();
           <img src="../img/share.png" alt="Share" class="comment-icon" data-postid="<?= $postId ?>" data-userid="<?= $userId ?>" style="cursor:pointer; width:24px;" />
         </div>
 
-          <div id="comment-popup" style="display:none;">
-      <div class="popup-overlay" onclick="closeCommentPopup()"></div>
-      <div class="popup-content">
-        <h3>Commentaires</h3>
-        <div id="comment-list" class="comment-list"></div>
-        <input type="text" id="comment-input" placeholder="Votre commentaire...">
-        <div class="comment-actions">
-          <button id="submit-comment">Envoyer</button>
-          <button onclick="closeCommentPopup()">Fermer</button>
+        <div id="comment-popup" style="display:none;">
+          <div class="popup-overlay" onclick="closeCommentPopup()"></div>
+          <div class="popup-content">
+            <h3>Commentaires</h3>
+            <div id="comment-list" class="comment-list"></div>
+            <input type="text" id="comment-input" placeholder="Votre commentaire...">
+            <div class="comment-actions">
+              <button id="submit-comment">Envoyer</button>
+              <button onclick="closeCommentPopup()">Fermer</button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
       </div>
     </div>
