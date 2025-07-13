@@ -26,6 +26,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GossipChat - Accueil</title>
+  <link rel="icon" type="image/png" href="../assets/images/logochat.png">
+
   <link rel="stylesheet" href="../assets/style1.css" />
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
   <script>
@@ -54,6 +56,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="sidebar-item"><img src="../img/groups.png" /><span><a href="../vues/groupes.php">Groupes</a></span></div><br><br>
     <div class="sidebar-item"><img src="../img/saved.png" /><span><a href="../vues/sauvegardes.php">Sauvegardes</a></span></div><br><br>
     <div class="sidebar-item"><img src="../img/<?= htmlspecialchars($user['photo_profil'] ?? 'default.jpg') ?>" /><span><a href="../vues/profil.php">Profil</a></span></div><br><br>
+    <div class="sidebar-item"><img src="../img/logout.png" alt=""><span><a href="../include/deconnexion.php">Déconnexion</a></span></div>
   </div>
 
   <div class="feed">
