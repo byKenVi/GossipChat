@@ -1,0 +1,73 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  color: #1c1e21;
+  padding: 40px 20px;
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #050505;
+}
+
+ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 0;
+  margin-bottom: 50px;
+}
+
+ul li {
+  background-color: #e7f3ff;
+  color: #1877f2;
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 20px 40px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(24, 119, 242, 0.15);
+  cursor: default;
+  transition: background-color 0.3s ease;
+}
+
+ul li:hover {
+  background-color: #d0e4ff;
+}
+
+nav {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #1877f2;
+}
+
+nav a {
+  color: #1877f2;
+  text-decoration: none;
+  margin: 0 12px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: background-color 0.25s ease;
+}
+
+nav a:hover {
+  background-color: #d0e4ff;
+}
+
+/* Responsive : empile la liste sur petits écrans */
+@media (max-width: 600px) {
+  ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  nav a {
+    display: inline-block;
+    margin: 10px 8px;
+  }
+}

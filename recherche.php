@@ -1,17 +1,17 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) exit;
+require_once '../include/database.php';
+
+if (!isset($_GET['q'])) {
+    echo json_encode([]);
+    exit;
+}
+
+$q = '%' . $_GET['q'] . '%';
+
+$stmt = $pdo->prepare("SELECT id, pseudo FROM utilisateurs WHERE pseudo LIKE ? OR email LIKE ?");
+$stmt->execute([$q, $q]);
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+header('Content-Type: application/json');
+echo json_encode($results);
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Recherche</title>
-  <link rel="stylesheet" href="assets/style.css">
-</head>
-<body>
-  <input type="text" id="search" placeholder="Rechercher un utilisateur...">
-  <div id="results"></div>
-  <script src="assets/recherche.js"></script>
-</body>
-</html>

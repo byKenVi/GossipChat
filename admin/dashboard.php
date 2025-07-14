@@ -1,30 +1,22 @@
 <?php
-require_once 'includes/check_admin.php';
+require_once '../include/check_admin.php';
+require_once '../include/database.php';
+
+$nbUsers = $pdo->query("SELECT COUNT(*) FROM utilisateurs")->fetchColumn();
+$nbPosts = $pdo->query("SELECT COUNT(*) FROM publications")->fetchColumn();
+$nbReports = $pdo->query("SELECT COUNT(*) FROM signalements")->fetchColumn();
 ?>
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Admin - Dashboard</title>
-  <link rel="stylesheet" href="../assets/style.css">
-</head>
-<body>
-<div class="sidebar">
-  <h2>ADMIN</h2>
-  <ul>
-    <li><a href="dashboard.php">Tableau de bord</a></li>
-    <li><a href="utilisateurs.php">Utilisateurs</a></li>
-    <li><a href="publications.php">Publications</a></li>
-    <li><a href="deconnexion.php">Déconnexion</a></li>
-  </ul>
-</div>
-<div class="main">
-  <div class="cards">
-    <div class="card"><h4>Utilisateurs</h4><p><strong>1200</strong></p></div>
-    <div class="card"><h4>Publications</h4><p><strong>3500</strong></p></div>
-    <div class="card"><h4>Commentaires</h4><p><strong>9800</strong></p></div>
-    <div class="card"><h4>Signalements</h4><p><strong>75</strong></p></div>
-  </div>
-</div>
-</body>
-</html>
+<html><head><title>Dashboard</title><link rel="stylesheet" href="../assets/style2.css"></head><body>
+<h1>Dashboard</h1>
+<ul>
+  <li>Utilisateurs : <?= $nbUsers ?></li>
+  <li>Publications : <?= $nbPosts ?></li>
+  <li>Signalements : <?= $nbReports ?></li>
+</ul>
+<nav>
+  <a href="utilisateurs.php">Utilisateurs</a> |
+  <a href="publications.php">Signalements</a> |
+  <a href="logout.php">Déconnexion</a>
+</nav>
+</body></html>

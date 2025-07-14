@@ -38,9 +38,6 @@
       <label for="email">E-mail</label>
       <input type="email" id="email" name="email" required />
 
-      <label for="photo_profil">photo de profil</label>
-      <input type="file" name="photo_profil" required>
-
       <label for="password">Mot de passe</label>
       <input type="password" id="password" name="password" required />
 

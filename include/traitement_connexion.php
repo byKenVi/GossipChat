@@ -20,19 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Stockage de l'utilisateur en session
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['user_pseudo'] = $user['pseudo'];
     $_SESSION['role'] = $user['role'];
 
-    // Redirection en fonction du rôle
     if ($user['role'] === 'admin' || $user['role'] === 'moderateur') {
         header('Location: ../admin/dashboard.php');
-        exit;
     } else {
         header('Location: ../vues/social_media.php');
-        exit;
     }
+    exit;
 } else {
     header('Location: ../connexion.php?error=Requête invalide');
     exit;

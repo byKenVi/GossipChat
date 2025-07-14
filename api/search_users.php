@@ -1,7 +1,22 @@
 <?php
 require_once '../include/database.php';
-$term = '%' . ($_GET['q'] ?? '') . '%';
-$stmt = $pdo->prepare("SELECT pseudo, nom, prenom, email FROM utilisateurs WHERE pseudo LIKE ? OR nom LIKE ? OR prenom LIKE ? OR email LIKE ? LIMIT 10");
-$stmt->execute([$term, $term, $term, $term]);
-echo json_encode($stmt->fetchAll());
-?>
+header('Content-Type: application/json; charset=utf-8');
+
+$q = trim($_GET['q'] ?? '');
+
+if (strlen($q) < 2) {
+    echo json_encode(['error' => 'Requête trop courte']);
+    exit;
+}
+
+// Recherche sur nom, prénom, email, pseudo
+$stmt = $pdo->prepare("
+    SELECT id, nom, prenom, email
+    FROM utilisateurs
+    WHERE nom LIKE :q OR prenom LIKE :q OR email LIKE :q OR pseudo LIKE :q
+    LIMIT 10
+");
+$stmt->execute(['q' => "%$q%"]);
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+echo json_encode(['results' => $results]);
