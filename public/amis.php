@@ -39,8 +39,13 @@ foreach ($relations as $rel) {
   <meta charset="UTF-8">
   <title>Gestion des amis</title>
   <link rel="stylesheet" href="../assets/amis.css">
+  <link rel="icon" type="image/png" href="../assets/images/logochat.png">
+
 </head>
 <body>
+  <div class="navbar">
+  <?php require_once '../vues/header.php'; ?>
+</div>
   <h2>Demandes d'amis reçues</h2>
   <ul class="amis-liste">
     <?php foreach ($statuts as $autreId => $info): ?>

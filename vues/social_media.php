@@ -63,11 +63,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <button type="submit">Publier</button>
         </form>
       </div>
-      <div class="create-post-options">
-        <div class="create-post-option"><img src="../img/live.png" /><span>Vidéo en direct</span></div>
-        <div class="create-post-option"><img src="../img/photo.png" /><span>Photo/vidéo</span></div>
-        <div class="create-post-option"><img src="../img/feeling.png" /><span>Humeur/Activité</span></div>
-      </div>
     </div>
     <div class="stories">
       <div class="story"><img src="../img/story1.jpg" /><span>Toi</span></div>

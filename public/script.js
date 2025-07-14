@@ -34,8 +34,8 @@ function createPostElement(post) {
 
   const userName = post.username;
   const media = post.media_path ? (post.media_type === 'image' ?
-    `<img src="${post.media_path}" alt="media" />` :
-    `<video src="${post.media_path}" controls></video>`) : '';
+    `<img class="post-media" src="${post.media_path}" alt="media" />` :
+    `<video class="post-media" src="${post.media_path}" controls></video>`) : '';
 
   div.innerHTML = `
     <p><strong>${userName}</strong></p>
