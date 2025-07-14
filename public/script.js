@@ -3,7 +3,8 @@ function formatHeure(dateStr) {
   const d = new Date(dateStr);
   return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
-
+let destinataire_id_messagerie = null;
+let destinataire_username = null;
 const postsContainer = document.getElementById('posts-container');
 
 console.log("✅ Connexion Socket.IO en cours...");
@@ -34,8 +35,8 @@ function createPostElement(post) {
 
   const userName = post.username;
   const media = post.media_path ? (post.media_type === 'image' ?
-    `<img src="${post.media_path}" alt="media" />` :
-    `<video src="${post.media_path}" controls></video>`) : '';
+    `<img class="post-media" src="${post.media_path}" alt="media" />` :
+    `<video class="post-media" src="${post.media_path}" controls></video>`) : '';
 
   div.innerHTML = `
     <p><strong>${userName}</strong></p>
