@@ -3,7 +3,8 @@ function formatHeure(dateStr) {
   const d = new Date(dateStr);
   return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
-
+let destinataire_id_messagerie = null;
+let destinataire_username = null;
 const postsContainer = document.getElementById('posts-container');
 
 console.log("✅ Connexion Socket.IO en cours...");

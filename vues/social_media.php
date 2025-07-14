@@ -159,6 +159,11 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
       searchResults.style.display = 'none';
     }
   });
+  function openChatWith(userId, username) {
+    document.getElementById("chatBox").style.display = "block";
+    document.getElementById("chat-username").textContent = username;
+    loadChatMessages(userId);
+  }
 </script>
 <script src="../public/script.js"></script>
 <script src="../public/messagerie.js"></script>

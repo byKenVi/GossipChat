@@ -9,7 +9,7 @@
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
 <body>
-    <div class="logo">GossipChat</div>
+   
   <div class="search-container">
     <input type="text" id="searchInput" placeholder="Rechercher sur GossipChat..." autocomplete="off" />
     <div id="searchResults" class="search-results"></div>
