@@ -31,6 +31,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
 <body>
+  <div id="main-content">
+    
 <div class="navbar">
   <div class="logo">GossipChat</div>
   <div class="search-container">
@@ -40,20 +42,30 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <div class="nav-icons">
     <img src="../img/home.png" class="nav-img" />
     <img src="../img/message.png" class="nav-img" id="msgIcon" />
-    <img src="../img/notification.png" class="nav-img" />
+<div class="nav-icons">
+    <div class="notification-container">
+        <img src="../img/notification.png" class="nav-img" id="notifIcon" />
+        <span id="notifCount" class="notif-badge">0</span>
+        <div id="notifMenu" class="notif-menu">
+            <p>Aucune notification</p>
+        </div> 
+    </div>
+</div>
     <a href="../vues/profil.php"><img src="../img/profil.png" class="nav-img" /></a>
   </div>
 </div>
 <div class="content">
+ 
   <div class="sidebar">
-    <div class="sidebar-item"><img src="../img/friends.png" /><span><a href="../public/amis.php">Amis</a></span></div><br><br>
-    <div class="sidebar-item"><img src="../img/groups.png" /><span><a href="../vues/groupes.php">Groupes</a></span></div><br><br>
-    <div class="sidebar-item"><img src="../img/saved.png" /><span><a href="../vues/sauvegardes.php">Sauvegardes</a></span></div><br><br>
-    <div class="sidebar-item"><img src="../img/<?= htmlspecialchars($user['photo_profil'] ?? 'default.jpg') ?>" /><span><a href="../vues/profil.php">Profil</a></span></div><br><br>
-    <div class="sidebar-item"><img src="../img/saved.png" /><span><a href="../demande_admin.php">S'inscrire en tant qu'admin</a></span></div><br><br>
-    <div class="sidebar-item"><img src="../img/logout.png" alt=""><span><a href="../include/deconnexion.php">Déconnexion</a></span></div>
+    <div class="sidebar-item"><img src="../img/friends.png" /><span><button class="switch-page" data-page="../public/amis.php">Amis</button></span>
+    </div><br><br>
+      <div class="sidebar-item"><img src="../img/<?= htmlspecialchars($user['photo_profil'] ?? 'default.jpg') ?>" /><span><a href="../vues/profil.php">Profil</a></span></div><br><br>
+      <div class="sidebar-item"><img src="../img/saved.png" /><span><a href="../demande_admin.php">S'inscrire en tant qu'admin</a></span></div><br><br>
+      <div class="sidebar-item"><img src="../img/logout.png" alt=""><span>
+        <a href="../include/deconnexion.php">Déconnexion</a>
+    </span></div>
   </div>
-  <div class="feed">
+   <div class="feed">
     <div class="create-post">
       <div class="create-post-top">
         <img src="../img/<?= htmlspecialchars($user['photo_profil'] ?? 'default.jpg') ?>" />
@@ -64,13 +76,11 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </form>
       </div>
     </div>
-    <div class="stories">
-      <div class="story"><img src="../img/story1.jpg" /><span>Toi</span></div>
-      <div class="story"><img src="../img/story2.jpg" /><span>Clara</span></div>
-      <div class="story"><img src="../img/story3.jpg" /><span>Marc</span></div>
-    </div>
     <div class="posts-container" id="posts-container"></div>
   </div>
+</div>
+
+  
   <div class="messagerie" id="messageriePanel">
     <div class="messagerie-header">
       <span>Messagerie</span>
@@ -164,6 +174,25 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     document.getElementById("chat-username").textContent = username;
     loadChatMessages(userId);
   }
+
+  document.querySelectorAll('.switch-page').forEach(button => {
+    button.addEventListener('click', function () {
+        const pageUrl = this.getAttribute('data-page');
+        fetch(pageUrl)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('main-content').innerHTML = html;
+                window.history.pushState({}, '', pageUrl);
+            })
+            .catch(err => console.error('Erreur de chargement de la page', err));
+    });
+});
+
+// Pour gérer le retour arrière du navigateur
+window.addEventListener('popstate', () => {
+    location.reload(); 
+});
+
 </script>
 <script src="../public/script.js"></script>
 <script src="../public/messagerie.js"></script>

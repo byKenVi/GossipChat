@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Début de la requête
     $sql = "UPDATE utilisateurs SET pseudo = :pseudo";
     $params = [
         'pseudo' => $pseudo,
