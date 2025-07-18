@@ -191,3 +191,29 @@ socket.on("newPost", post => {
     postsContainer.prepend(postElement);
   }
 });
+
+let notifCount = 0;
+const notifBadge = document.getElementById('notifCount');
+const notifMenu = document.getElementById('notifMenu');
+
+function addNotification(content) {
+    notifCount++;
+    notifBadge.textContent = notifCount;
+    notifBadge.style.display = 'inline-block';
+
+    const p = document.createElement('p');
+    p.textContent = content;
+    notifMenu.appendChild(p);
+}
+
+// Exemple : quand un message est reçu
+socket.on("newMessage", (msg) => {
+    if (parseInt(msg.destinataire_id) === parseInt(USER_ID)) {
+        addNotification(`Nouveau message de ${msg.pseudo}`);
+    }
+});
+
+document.getElementById('notifIcon').addEventListener('click', () => {
+    notifCount = 0;
+    notifBadge.style.display = 'none';
+});
