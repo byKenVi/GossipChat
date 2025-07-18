@@ -190,7 +190,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Pour gérer le retour arrière du navigateur
 window.addEventListener('popstate', () => {
-    location.reload(); // Ou mieux, tu pourrais re-fetch la bonne page ici
+    location.reload(); 
 });
 
 </script>
