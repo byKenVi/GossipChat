@@ -10,7 +10,22 @@ if (isset($_POST['action']) && isset($_POST['id'])) {
     $db->prepare("DELETE FROM signalements WHERE id = ?")->execute([$id]);
 }
 
-$reports = $pdo->query("SELECT s.id, p.titre, s.raison FROM signalements s JOIN publications p ON s.publication_id = p.id")->fetchAll();
+$reports = $pdo->query("
+  SELECT 
+    s.id AS id_signalement,
+    s.raison,
+    s.commentaire,
+    s.date_signalement,
+    LEFT(p.contenu, 100) AS extrait_publication,
+    p.id AS id_publication,
+    p.date_publication,
+    u.pseudo AS signale_par
+  FROM signalements s
+  JOIN publications p ON s.publication_id = p.id
+  JOIN utilisateurs u ON s.utilisateur_id = u.id
+  ORDER BY s.date_signalement DESC
+")->fetchAll();
+
 ?>
 <!DOCTYPE html>
 <html><head><title>Signalements</title><link rel="stylesheet" href="../assets/style2.css"></head><body>

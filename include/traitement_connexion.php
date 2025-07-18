@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['user_pseudo'] = $user['pseudo'];
     $_SESSION['role'] = $user['role'];
 
-    if ($user['role'] === 'admin' || $user['role'] === 'moderateur') {
+    if ($user['role'] === 'admin' || $user['role'] === 'moderateurs') {
         header('Location: ../admin/dashboard.php');
     } else {
         header('Location: ../vues/social_media.php');
