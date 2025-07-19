@@ -11,6 +11,8 @@ if (!isset($_SESSION['user_id'])) {
   <meta charset="UTF-8">
   <title>GossipChat - Chat</title>
   <link rel="stylesheet" href="assets/chat.css">
+  <script src="js/socket.js"></script>
+
 </head>
 <body>
 <div class="chat-container">

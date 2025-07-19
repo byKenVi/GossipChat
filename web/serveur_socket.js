@@ -1,5 +1,10 @@
 // 📄 serveur_socket.js (Socket.io complet pour GossipChat)
 
+
+const socket = io('https://gossipchat-b9kn.onrender.com', {
+  transports: ['websocket']
+});
+
 const http = require("http");
 const { Server } = require("socket.io");
 
