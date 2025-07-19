@@ -64,10 +64,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <span><a href="../vues/profil.php">Profil</a></span>
         </div>
         <br /><br />
-        <div class="sidebar-item">
-          <img src="../img/saved.png" alt="Demande Admin" />
-          <span><a href="../demande_admin.php">S'inscrire en tant qu'admin</a></span>
-        </div>
         <br /><br />
         <div class="sidebar-item">
           <img src="../img/logout.png" alt="Déconnexion" />

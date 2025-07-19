@@ -10,14 +10,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
-    if ($user && password_verify($mdp, $user['mot_de_passe']) && in_array($user['role'], ['admin', 'moderateur'])) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['role'] = $user['role'];
-        header("Location: dashboard.php");
-        exit;
-    } else {
-        $error = "Accès refusé. Email ou mot de passe incorrect, ou rôle non autorisé.";
-    }
+    if (in_array($user['role'], ['admin', 'moderateur'])) {
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['role'] = $user['role'];
+    header("Location: dashboard.php");
+    exit;
+} else {
+    header("Location: connexion.php");
+    $error = "Accès refusé. Email ou mot de passe incorrect, ou rôle non autorisé.";
+}
+
 }
 ?>
 <!DOCTYPE html>
